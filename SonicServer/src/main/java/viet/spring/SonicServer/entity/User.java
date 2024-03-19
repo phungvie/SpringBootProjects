@@ -27,6 +27,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import viet.spring.SonicServer.DTO.UserDTO;
 
 @Data
 @AllArgsConstructor
@@ -52,6 +53,22 @@ public class User {
 	
 	private Integer followers;
 	private Integer following;
+	
+	
+	public User(UserDTO viet) {
+		this.userID = viet.getUserID();
+		this.name = viet.getName();
+		this.phone = viet.getPhone();
+		this.mail = viet.getMail();
+		this.dateOfBirth = viet.getDateOfBirth();
+		this.country = viet.getCountry();
+		this.img = viet.getImg();
+		this.followers = viet.getFollowers();
+		this.following = viet.getFollowers();
+	}
+	
+	
+	
 	
 //    @ElementCollection
 //    @CollectionTable(name = "librar_bottom")

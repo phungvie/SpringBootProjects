@@ -1,24 +1,36 @@
 package viet.spring.SonicServer.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.*;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.validation.Valid;
+import com.google.common.collect.Lists;
+
 import lombok.AllArgsConstructor;
 import viet.spring.SonicServer.DTO.UserDTO;
 import viet.spring.SonicServer.config.UserImplUserDetails;
+import viet.spring.SonicServer.entity.Role;
+import viet.spring.SonicServer.entity.User;
 import viet.spring.SonicServer.payload.LoginRequest;
 import viet.spring.SonicServer.payload.LoginResponse;
+import viet.spring.SonicServer.repository.RoleRepository;
+import viet.spring.SonicServer.repository.UserRepository;
 import viet.spring.SonicServer.service.JwtTokenProvider;
 import viet.spring.SonicServer.service.UserService;
 
@@ -31,13 +43,18 @@ public class securityController {
 	AuthenticationManager authenticationManager;
 
 	private JwtTokenProvider tokenProvider;
+	
+	RoleRepository roleR;
+	
+	BCryptPasswordEncoder encoder;
 
 	UserService userService;
 
-	UserService vUserService;
+	
+	UserRepository userR;
 
 	@PostMapping("/login")
-	public LoginResponse authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+	public LoginResponse authenticateUser(@RequestBody LoginRequest loginRequest) {
 
 		// Xác thực từ username và password.
 		Authentication authentication = authenticationManager.authenticate(
@@ -58,10 +75,54 @@ public class securityController {
 	// Api /api/random yêu cầu phải xác thực mới có thể request
 	@GetMapping("/getUser")
 	public UserDTO getUser(Principal viet) {
-		Optional<viet.spring.SonicServer.entity.User> vietdz = vUserService.findByUsername(viet.getName());
+		Optional<User> vietdz = userService.findByUsername(viet.getName());
 		UserDTO vietDTO=new UserDTO(vietdz.get());
 		return vietDTO;
 
 	}
+	@PostMapping("/signup")
+	public ResponseEntity<String> AddUser(@RequestBody UserDTO viet) {
+		
+
+		Role role1 = roleR.findById(1).orElse(null);
+//		Role role2 = roleR.findById(2).orElse(null);
+		Role role3 = roleR.findById(3).orElse(null);
+		
+		User sonic = new User(viet);
+		sonic.setRoles(Lists.newArrayList(role1, role3));
+		userR.save(sonic);
+		
+		return null;
+		
+		/*
+		 	        if (file.isEmpty()) {
+	            return ResponseEntity.badRequest().body("Please upload a file");
+	        }
+
+	        try {
+	            byte[] bytes = file.getBytes();
+	            Path path = Paths.get(UPLOAD_DIR+"\\img\\" + file.getOriginalFilename());
+	            Files.write(path, bytes);
+	            return ResponseEntity.ok().body("File uploaded successfully");
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload file");
+	        }
+		  */
+	}
+	
+	@PostMapping("/signup/admin")
+	public ResponseEntity<String> AddAdmin(@RequestBody UserDTO viet) {
+//		Role role1 = roleR.findById(1).orElse(null);
+		Role role2 = roleR.findById(2).orElse(null);
+		Role role3 = roleR.findById(3).orElse(null);
+		
+		User sonic = new User(viet);
+		sonic.setRoles(Lists.newArrayList(role2, role3));
+		userR.save(sonic);
+		
+		return null;
+	}
+	
 
 }
