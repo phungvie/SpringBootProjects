@@ -40,7 +40,7 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import jakarta.transaction.Transactional;
 import viet.spring.SonicServer.entity.Role;
 import viet.spring.SonicServer.entity.User;
-import viet.spring.SonicServer.service.JwtAuthenticationFilter;
+import viet.spring.SonicServer.jwt.JwtAuthenticationFilter;
 import viet.spring.SonicServer.service.UserService;
 import org.springframework.security.config.annotation.web.configuration.*;
 
@@ -108,8 +108,8 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter)
 			throws Exception {
 		http.csrf(t -> t.disable()).authorizeHttpRequests(authorize -> authorize
-//				.requestMatchers("/random").hasAnyRole("USER")
-				.requestMatchers("/api/getUser").hasAnyRole("USER", "AUTHENTICATED").anyRequest().permitAll())
+				.requestMatchers("/sonic/**","/data/**","/security/getUser").hasAnyRole("USER","ADMIN")
+				.anyRequest().permitAll())
 		// Khi người dùng đã login, với vai trò XX.
 		// Nhưng truy cập vào trang yêu cầu vai trò YY,
 		// Ngoại lệ AccessDeniedException sẽ ném ra.

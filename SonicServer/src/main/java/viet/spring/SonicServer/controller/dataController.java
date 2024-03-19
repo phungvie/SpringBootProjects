@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.UUID;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -45,19 +46,29 @@ public class dataController {
 
 	}
 	
-	   private static final String UPLOAD_DIR = "C:\\dataSonic";
+	   private static final String UPLOAD_DIR_IMG = "C:\\dataSonic\\img\\";
+	   private static final String UPLOAD_DIR_STREAM= "C:\\dataSonic\\stream\\";
 
-	    @PostMapping("/img/upload")
+	    @PostMapping("/imgUpload")
 	    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
 	        if (file.isEmpty()) {
 	            return ResponseEntity.badRequest().body("Please upload a file");
 	        }
-
+	       
 	        try {
+	        	
+	        	
+	            // Tạo một tên mới duy nhất cho tập tin
+	            String originalFilename = file.getOriginalFilename();
+	            String extension = originalFilename.substring(originalFilename.lastIndexOf('.'));
+	            String start = originalFilename.substring(0,originalFilename.lastIndexOf('.'));
+	            String newFilename = start+"."+generateUniqueFilename() + extension;
+	            
+	            
 	            byte[] bytes = file.getBytes();
-	            Path path = Paths.get(UPLOAD_DIR+"\\img\\" + file.getOriginalFilename());
+	            Path path = Paths.get(UPLOAD_DIR_IMG + newFilename);
 	            Files.write(path, bytes);
-	            return ResponseEntity.ok().body("File uploaded successfully");
+	            return ResponseEntity.ok().body(newFilename);
 	        } catch (IOException e) {
 	            e.printStackTrace();
 	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload file");
@@ -65,20 +76,36 @@ public class dataController {
 	    }
 	    
 
-	    @PostMapping("/stream/upload")
+	    @PostMapping("/streamUpload")
 	    public ResponseEntity<String> uploadStream(@RequestParam("file") MultipartFile file) {
 	        if (file.isEmpty()) {
 	            return ResponseEntity.badRequest().body("Please upload a file");
 	        }
 
 	        try {
+	        	
+	        	
+	            // Tạo một tên mới duy nhất cho tập tin
+	            String originalFilename = file.getOriginalFilename();
+	            String extension = originalFilename.substring(originalFilename.lastIndexOf('.'));
+	            String start = originalFilename.substring(0,originalFilename.lastIndexOf('.'));
+	            String newFilename = start+"."+generateUniqueFilename() + extension;
+	        	
 	            byte[] bytes = file.getBytes();
-	            Path path = Paths.get(UPLOAD_DIR +"\\stream\\"+ file.getOriginalFilename());
+	            Path path = Paths.get(UPLOAD_DIR_STREAM + newFilename);
 	            Files.write(path, bytes);
-	            return ResponseEntity.ok().body("File uploaded successfully");
+	            return ResponseEntity.ok().body(newFilename);
 	        } catch (IOException e) {
 	            e.printStackTrace();
 	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload file");
 	        }
 	    }
+	    
+	    private String generateUniqueFilename() {
+	        // Sử dụng UUID để tạo tên tập tin duy nhất
+	        return UUID.randomUUID().toString();
+	    }
+	    
+
+	    
 }

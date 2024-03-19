@@ -1,5 +1,6 @@
 package viet.spring.SonicServer.controller;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,15 +19,17 @@ import viet.spring.SonicServer.entity.Artist;
 import viet.spring.SonicServer.entity.Playlist;
 import viet.spring.SonicServer.entity.User;
 import viet.spring.SonicServer.repository.UserRepository;
+import viet.spring.SonicServer.service.UserService;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/sonic")
 public class sonicController {
+	UserService userService;
 	UserRepository userR;
-	@GetMapping("/lib/artists/{id}")
-	public ResponseEntity< List<ArtistDTO>> getLibArtist(@PathVariable(name = "id") Integer id) {
-        User viet = userR.findById(id).orElse(null);
+	@GetMapping("/lib/artists")
+	public ResponseEntity< List<ArtistDTO>> getLibArtist(Principal vietdz) {
+        User viet = userService.findByUsername(vietdz.getName()).orElse(null);
         if (viet != null) {
             // Kiểm tra nếu LibraryArtist không null trước khi trả về
             if (viet.getLibraryArtist() != null) {
@@ -45,9 +48,9 @@ public class sonicController {
     }
 	
 
-	@GetMapping("/lib/playlists/{id}")
-	public ResponseEntity<List<PlaylistDTO>> getLibPlaylist(@PathVariable(name = "id")Integer id) {
-        User viet = userR.findById(id).orElse(null);
+	@GetMapping("/lib/playlists")
+	public ResponseEntity<List<PlaylistDTO>> getLibPlaylist(Principal vietdz) {
+		User viet = userService.findByUsername(vietdz.getName()).orElse(null);
         if (viet != null) {
             // Kiểm tra nếu LibraryArtist không null trước khi trả về
             if (viet.getLibraryPlaylist() != null) {

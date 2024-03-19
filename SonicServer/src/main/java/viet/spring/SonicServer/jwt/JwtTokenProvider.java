@@ -1,4 +1,4 @@
-package viet.spring.SonicServer.service;
+package viet.spring.SonicServer.jwt;
 
 import java.util.Date;
 

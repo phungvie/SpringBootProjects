@@ -31,7 +31,7 @@ import viet.spring.SonicServer.payload.LoginRequest;
 import viet.spring.SonicServer.payload.LoginResponse;
 import viet.spring.SonicServer.repository.RoleRepository;
 import viet.spring.SonicServer.repository.UserRepository;
-import viet.spring.SonicServer.service.JwtTokenProvider;
+import viet.spring.SonicServer.jwt.JwtTokenProvider;
 import viet.spring.SonicServer.service.UserService;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,14 +43,13 @@ public class securityController {
 	AuthenticationManager authenticationManager;
 
 	private JwtTokenProvider tokenProvider;
-	
+
 	RoleRepository roleR;
-	
+
 	BCryptPasswordEncoder encoder;
 
 	UserService userService;
 
-	
 	UserRepository userR;
 
 	@PostMapping("/login")
@@ -58,7 +57,7 @@ public class securityController {
 
 		// Xác thực từ username và password.
 		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+				new UsernamePasswordAuthenticationToken(loginRequest.getUsername().trim(), loginRequest.getPassword().trim()));
 
 		// Nếu không xảy ra exception tức là thông tin hợp lệ
 		// Set thông tin authentication vào Security Context
@@ -76,53 +75,46 @@ public class securityController {
 	@GetMapping("/getUser")
 	public UserDTO getUser(Principal viet) {
 		Optional<User> vietdz = userService.findByUsername(viet.getName());
-		UserDTO vietDTO=new UserDTO(vietdz.get());
+		UserDTO vietDTO = new UserDTO(vietdz.get());
 		return vietDTO;
 
 	}
+
 	@PostMapping("/signup")
 	public ResponseEntity<String> AddUser(@RequestBody UserDTO viet) {
-		
+		if (viet == null) {
+			return ResponseEntity.badRequest().body("The UserDTO object is empty");
+		} else {
+			Role role1 = roleR.findById(1).orElse(null);
+//	    		Role role2 = roleR.findById(2).orElse(null);
+			Role role3 = roleR.findById(3).orElse(null);
 
-		Role role1 = roleR.findById(1).orElse(null);
-//		Role role2 = roleR.findById(2).orElse(null);
-		Role role3 = roleR.findById(3).orElse(null);
-		
-		User sonic = new User(viet);
-		sonic.setRoles(Lists.newArrayList(role1, role3));
-		userR.save(sonic);
-		
-		return null;
-		
-		/*
-		 	        if (file.isEmpty()) {
-	            return ResponseEntity.badRequest().body("Please upload a file");
-	        }
+			User sonic = new User(viet);
+			sonic.setRoles(Lists.newArrayList(role1, role3));
+			userR.save(sonic);
 
-	        try {
-	            byte[] bytes = file.getBytes();
-	            Path path = Paths.get(UPLOAD_DIR+"\\img\\" + file.getOriginalFilename());
-	            Files.write(path, bytes);
-	            return ResponseEntity.ok().body("File uploaded successfully");
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload file");
-	        }
-		  */
+			return ResponseEntity.ok().body("Successfully");
+
+		}
+
 	}
-	
+
 	@PostMapping("/signup/admin")
 	public ResponseEntity<String> AddAdmin(@RequestBody UserDTO viet) {
+		if (viet == null) {
+			return ResponseEntity.badRequest().body("The UserDTO object is empty");
+		} else {
 //		Role role1 = roleR.findById(1).orElse(null);
-		Role role2 = roleR.findById(2).orElse(null);
-		Role role3 = roleR.findById(3).orElse(null);
-		
-		User sonic = new User(viet);
-		sonic.setRoles(Lists.newArrayList(role2, role3));
-		userR.save(sonic);
-		
-		return null;
+			Role role2 = roleR.findById(2).orElse(null);
+			Role role3 = roleR.findById(3).orElse(null);
+
+			User sonic = new User(viet);
+			sonic.setRoles(Lists.newArrayList(role2, role3));
+			userR.save(sonic);
+
+			return ResponseEntity.ok().body("Successfully");
+
+		}
 	}
-	
 
 }
