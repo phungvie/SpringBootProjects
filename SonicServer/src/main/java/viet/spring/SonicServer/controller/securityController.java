@@ -57,7 +57,7 @@ public class securityController {
 
 		// Xác thực từ username và password.
 		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginRequest.getUsername().trim(), loginRequest.getPassword().trim()));
+				new UsernamePasswordAuthenticationToken(loginRequest.getUsername().trim(), loginRequest.getPassword()));
 
 		// Nếu không xảy ra exception tức là thông tin hợp lệ
 		// Set thông tin authentication vào Security Context
