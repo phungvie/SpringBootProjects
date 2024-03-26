@@ -44,7 +44,7 @@ public class SonicServerApplication implements CommandLineRunner {
 	@Transactional
 	public void run(String... args) throws Exception {
 
-//
+
 ////Các quyền
 //		Role role0 = Role.builder().name("USER").build();
 //		Role role1 = Role.builder().name("ADMIN").build();
@@ -59,10 +59,10 @@ public class SonicServerApplication implements CommandLineRunner {
 ////
 //
 ////Nhạc sĩ		
-//		Artist artistSonTung = Artist.builder().name("Sơn Tùng M-TP").image("/data/img/anh1.jpg").build();
-//		Artist artistPhuongLy = Artist.builder().name("Phương Ly").image("/data/img/anh1.jpg").build();
-//		Artist artistBichPhuong = Artist.builder().name("Bích Phương").image("/data/img/anh1.jpg").build();
-//		Artist artistJustaTee = Artist.builder().name("JustaTee").image("/data/img/anh1.jpg").build();
+//		Artist artistSonTung = Artist.builder().name("Sơn Tùng M-TP").image("/data/img/son_tung_6-160862605540810660.jpg").build();
+//		Artist artistPhuongLy = Artist.builder().name("Phương Ly").image("/data/img/222214_phuonglytrolaigoicamtruongthanhvoiamnhac1206.jpeg").build();
+//		Artist artistBichPhuong = Artist.builder().name("Bích Phương").image("/data/img/bich_phuong.7ab4f334-5994-461d-9e58-4dbfb763c619.png").build();
+//		Artist artistJustaTee = Artist.builder().name("JustaTee").image("/data/img/JustaTee.1453715057717.jpg").build();
 //
 //		artistR.saveAll(
 //				() -> Lists.newArrayList(artistSonTung, artistPhuongLy, artistBichPhuong, artistJustaTee).iterator());
@@ -116,14 +116,14 @@ public class SonicServerApplication implements CommandLineRunner {
 ////		
 //		
 ////Playlist
-//		Playlist playlist1 = Playlist.builder().name("Tập các bài hát của Sơn Tùng").image("/data/img/anh1.jpg")
+//		Playlist playlist1 = Playlist.builder().name("Tập các bài hát của Sơn Tùng").image("/data/img/son-tung-mmw-2824-1683249980.jpg")
 //				.build();
 //		playlist1.setUser(sonic);
 //		playlist1.setSongs(Lists.newArrayList(songHTCA, songMNMBA, songNNCA));
 //		playlistR.saveAndFlush(playlist1);
 //
 //		
-//		Playlist playlist2 = Playlist.builder().name("Tập các bài hát của Bích Phương").image("/data/img/anh1.jpg")
+//		Playlist playlist2 = Playlist.builder().name("Tập các bài hát của Bích Phương").image("/data/img/bich_phuong.7ab4f334-5994-461d-9e58-4dbfb763c619.png")
 //				.build();
 //		playlist2.setUser(sonic);
 //		playlist2.setSongs(Lists.newArrayList(songBGLC, songCCBQ));
@@ -135,7 +135,7 @@ public class SonicServerApplication implements CommandLineRunner {
 //		sonic.setLibraryPlaylist(Lists.newArrayList(playlist1));
 //		userR.save(sonic);
 ////
-//
+
 		
 	}
 
