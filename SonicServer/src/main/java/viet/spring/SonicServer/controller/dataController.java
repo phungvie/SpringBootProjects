@@ -28,7 +28,7 @@ public class dataController {
 		// Đọc dữ liệu từ tài nguyên và trả về trong ResponseEntity
 //		byte[] data = Files.readAllBytes(resource.getFile().toPath());
 		
-		byte[] data = Files.readAllBytes(Paths.get("C:\\dataSonic\\img\\"+filename));
+		byte[] data = Files.readAllBytes(Paths.get("/dataSonic/img/"+filename));
 
 		return ResponseEntity.ok().body(data);
 
@@ -40,14 +40,14 @@ public class dataController {
 
 		// Đọc dữ liệu từ tài nguyên và trả về trong ResponseEntity
 //		byte[] data = Files.readAllBytes(resource.getFile().toPath());
-		byte[] data = Files.readAllBytes(Paths.get("C:\\dataSonic\\stream\\"+filename));
+		byte[] data = Files.readAllBytes(Paths.get("/dataSonic/stream/"+filename));
 
 		return ResponseEntity.ok().body(data);
 
 	}
 	
-	   private static final String UPLOAD_DIR_IMG = "C:\\dataSonic\\img\\";
-	   private static final String UPLOAD_DIR_STREAM= "C:\\dataSonic\\stream\\";
+	   private static final String UPLOAD_DIR_IMG = "/dataSonic/img/";
+	   private static final String UPLOAD_DIR_STREAM= "/dataSonic/stream/";
 
 	    @PostMapping("/imgUpload")
 	    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
