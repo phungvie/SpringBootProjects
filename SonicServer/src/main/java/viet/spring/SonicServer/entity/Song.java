@@ -22,6 +22,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import viet.spring.SonicServer.DTO.SongDTO;
 
 @Data
 @AllArgsConstructor
@@ -39,6 +40,19 @@ public class Song {
 	private String image;
 	private String sound;
 	private Timestamp releaseTime;
+	
+	
+	
+	
+
+	public Song(SongDTO songDTO) {
+		super();
+		this.songID = songDTO.getSongID();
+		this.name = songDTO.getArtistName();
+		this.image = songDTO.getImage();
+		this.sound = songDTO.getSound();
+		this.releaseTime = songDTO.getReleaseTime();
+	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "album_id") // thông qua khóa ngoại albumID

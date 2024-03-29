@@ -80,10 +80,10 @@ public class securityController {
 
 	}
 
-	@PostMapping("/signup")
+	@PostMapping("/signup/user")
 	public ResponseEntity<String> AddUser(@RequestBody UserDTO viet) {
 		if (viet == null) {
-			return ResponseEntity.badRequest().body("The UserDTO object is empty");
+			return ResponseEntity.badRequest().body("Đối tượng UserDTO là rỗng");
 		} else {
 			Role role1 = roleR.findById(1).orElse(null);
 //	    		Role role2 = roleR.findById(2).orElse(null);
@@ -93,7 +93,7 @@ public class securityController {
 			sonic.setRoles(Lists.newArrayList(role1, role3));
 			userR.save(sonic);
 
-			return ResponseEntity.ok().body("Successfully");
+			return ResponseEntity.ok().body("Thêm user thành công");
 
 		}
 
@@ -102,7 +102,7 @@ public class securityController {
 	@PostMapping("/signup/admin")
 	public ResponseEntity<String> AddAdmin(@RequestBody UserDTO viet) {
 		if (viet == null) {
-			return ResponseEntity.badRequest().body("The UserDTO object is empty");
+			return ResponseEntity.badRequest().body("Đối tượng UserDTO là rỗng");
 		} else {
 //		Role role1 = roleR.findById(1).orElse(null);
 			Role role2 = roleR.findById(2).orElse(null);
@@ -112,7 +112,7 @@ public class securityController {
 			sonic.setRoles(Lists.newArrayList(role2, role3));
 			userR.save(sonic);
 
-			return ResponseEntity.ok().body("Successfully");
+			return ResponseEntity.ok().body("Thêm admin thành công");
 
 		}
 	}

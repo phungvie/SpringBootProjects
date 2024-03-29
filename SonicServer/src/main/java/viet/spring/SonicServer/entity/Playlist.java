@@ -19,6 +19,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import viet.spring.SonicServer.DTO.PlaylistDTO;
 import jakarta.persistence.UniqueConstraint;
 
 @Data
@@ -29,12 +30,22 @@ import jakarta.persistence.UniqueConstraint;
 @Entity
 
 public class Playlist {
+
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name= "playlist_id")
 	private Integer playlistID;
 	private String name;
 	private String image;
+	
+	
+	
+	public Playlist(PlaylistDTO playlistDTO) {
+		this.playlistID = playlistDTO.getPlaylistID();
+		this.name = playlistDTO.getName();
+		this.image = playlistDTO.getImage();
+	}
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@EqualsAndHashCode.Exclude // không sử dụng trường này trong equals và hashcode

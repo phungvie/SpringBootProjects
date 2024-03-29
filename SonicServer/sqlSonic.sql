@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `playlist` (
 
 -- Dumping data for table sonic.playlist: ~2 rows (approximately)
 INSERT INTO `playlist` (`playlist_id`, `image`, `name`, `user_id`) VALUES
-	(1, '/data/img/son-tung-mmw-2824-1683249980.jpg', 'Tập các bài hát của Sơn Tùng', 1),
+	(1, '/data/img/son-tung-mmw-2824-1683249980.jpg', 'Tập tất cả bài hát', 1),
 	(2, '/data/img/bich_phuong.7ab4f334-5994-461d-9e58-4dbfb763c619.png', 'Tập các bài hát của Bích Phương', 1);
 
 -- Dumping structure for table sonic.playlist_song
@@ -147,13 +147,18 @@ CREATE TABLE IF NOT EXISTS `playlist_song` (
   CONSTRAINT `FKji5gt6i2hcwyt9x1fcfndclva` FOREIGN KEY (`playlist_id`) REFERENCES `playlist` (`playlist_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table sonic.playlist_song: ~5 rows (approximately)
+-- Dumping data for table sonic.playlist_song: ~10 rows (approximately)
 INSERT INTO `playlist_song` (`playlist_id`, `song_id`) VALUES
+	(1, 1),
 	(2, 1),
 	(1, 2),
+	(1, 3),
 	(1, 4),
 	(1, 5),
-	(2, 6);
+	(1, 6),
+	(2, 6),
+	(1, 7),
+	(1, 8);
 
 -- Dumping structure for table sonic.role
 CREATE TABLE IF NOT EXISTS `role` (

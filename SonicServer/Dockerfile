@@ -1,13 +1,7 @@
-FROM openjdk:23-oraclelinux8
+FROM maven:latest
 
-WORKDIR /app
-
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
-
-RUN ./mvnw dependency:go-offline
-COPY src ./src
-
-CMD ["./mvnw", "spring-boot:run"]
-
-
+RUN mkdir /SonicServer
+WORKDIR /SonicServer
+COPY . .
+EXPOSE 8080
+CMD [ "mvn","spring-boot:run" ]

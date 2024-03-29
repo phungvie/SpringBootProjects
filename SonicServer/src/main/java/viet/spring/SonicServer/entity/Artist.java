@@ -17,6 +17,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import viet.spring.SonicServer.DTO.ArtistDTO;
 
 @Data
 @AllArgsConstructor
@@ -34,6 +35,18 @@ public class Artist {
 	private Date dateOfBirth;
 	private String country;
 	private String image;
+	
+	
+
+	public Artist(ArtistDTO artistDTO) {
+		this.artistID = artistDTO.getArtistID();
+		this.name = artistDTO.getName();
+		this.dateOfBirth = artistDTO.getDateOfBirth();
+		this.country = artistDTO.getCountry();
+		this.image = artistDTO.getImage();
+
+	}
+
 
 	@OneToMany(mappedBy = "artist", cascade = CascadeType.ALL)
 	@EqualsAndHashCode.Exclude // không sử dụng trường này trong equals và hashcode
