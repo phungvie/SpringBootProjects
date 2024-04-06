@@ -49,13 +49,22 @@ public class SonicServerApplication implements CommandLineRunner {
 //		Role role0 = Role.builder().name("USER").build();
 //		Role role1 = Role.builder().name("ADMIN").build();
 //		Role role2 = Role.builder().name("AUTHENTICATED").build();
-//		roleR.saveAll(() -> Lists.newArrayList(role0, role1, role2).iterator());
+//		Role role3 = Role.builder().name("PREMIUM").build();
+//		roleR.saveAll(() -> Lists.newArrayList(role0, role1, role2,role3).iterator());
 ////
 //		
 ////Người dùng
-//		User sonic = User.builder().name("Sonic Admin").password(encoder.encode("123")).mail("sonic").build();
-//		sonic.setRoles(Lists.newArrayList(role0, role1, role2));
+//		User sonic = User.builder().name("Sonic Admin").password(encoder.encode("123")).mail("sonic1").build();
+//		sonic.setRoles(Lists.newArrayList(role0, role1, role2,role3));
 //		userR.save(sonic);
+//		
+//		User sonic2 = User.builder().name("Sonic User").password(encoder.encode("123")).mail("sonic2").build();
+//		sonic2.setRoles(Lists.newArrayList(role0, role2));
+//		userR.save(sonic2);
+//		
+//		User sonic3 = User.builder().name("Sonic User Premium").password(encoder.encode("123")).mail("sonic3").build();
+//		sonic3.setRoles(Lists.newArrayList(role0, role2,role3));
+//		userR.save(sonic3);
 ////
 //
 ////Nhạc sĩ		
@@ -63,9 +72,9 @@ public class SonicServerApplication implements CommandLineRunner {
 //		Artist artistPhuongLy = Artist.builder().name("Phương Ly").image("/data/img/222214_phuonglytrolaigoicamtruongthanhvoiamnhac1206.jpeg").build();
 //		Artist artistBichPhuong = Artist.builder().name("Bích Phương").image("/data/img/bich_phuong.7ab4f334-5994-461d-9e58-4dbfb763c619.png").build();
 //		Artist artistJustaTee = Artist.builder().name("JustaTee").image("/data/img/JustaTee.1453715057717.jpg").build();
-//
+//		Artist artistSiro = Artist.builder().name("Mr.Siro").image("/data/img/Mr.Siro.1505103180911.jpg").build();
 //		artistR.saveAll(
-//				() -> Lists.newArrayList(artistSonTung, artistPhuongLy, artistBichPhuong, artistJustaTee).iterator());
+//				() -> Lists.newArrayList(artistSonTung, artistPhuongLy, artistBichPhuong, artistJustaTee,artistSiro).iterator());
 ////
 //		
 ////Bài hát
@@ -108,33 +117,79 @@ public class SonicServerApplication implements CommandLineRunner {
 //		songTD.setSound("/data/stream/ThangDienLive-JustaTeePhuongLy-6066987.mp3");
 //		songTD.setImage("/data/img/anh1.jpg");
 //		songTD.setArtist(artistJustaTee);
+//		
+//		Song songADSVAT = Song.builder().name("Anh Đã Sai Vì Anh Tin").build();// Mr.siro
+//		songADSVAT.setSound("/data/stream/AnhDaSaiViAnhTin-MrSiro-4694386.mp3");
+//		songADSVAT.setImage("/data/img/anh1.jpg");
+//		songADSVAT.setArtist(artistSiro);
+//		
+//		Song songYNKTY = Song.builder().name("Yêu Người Không Thể Yêu").build();// Mr.siro
+//		songYNKTY.setSound("/data/stream/YeuNguoiKhongTheYeuCover-MrSiro-5049892.mp3");
+//		songYNKTY.setImage("/data/img/anh1.jpg");
+//		songYNKTY.setArtist(artistSiro);
+//		
+//		Song songTYCV = Song.builder().name("Tình Yêu Chắp Vá").build();// Mr.siro
+//		songTYCV.setSound("/data/stream/TinhYeuChapVa-MrSiro-4350275.mp3");
+//		songTYCV.setImage("/data/img/anh1.jpg");
+//		songTYCV.setArtist(artistSiro);
+//		
+//		Song songCE = Song.builder().name("Cho Em").build();// Mr.siro
+//		songCE.setSound("/data/stream/ChoEm-MrSiro-3254801.mp3");
+//		songCE.setImage("/data/img/anh1.jpg");
+//		songCE.setArtist(artistSiro);
+//		
 //
 //		songR.saveAllAndFlush(
-//				() -> Lists.newArrayList(songBGLC, songHTCA, songMTCE, songMNMBA, songNNCA, songCCBQ, songTCNNT, songTD)
+//				() -> Lists.newArrayList(
+//						songBGLC, songHTCA, songMTCE, 
+//						songMNMBA, songNNCA, songCCBQ, 
+//						songTCNNT, songTD,songADSVAT,
+//						songYNKTY,songTYCV,songCE)
 //						.iterator());
 //		
 ////		
 //		
 ////Playlist
-//		Playlist playlist1 = Playlist.builder().name("Tập các bài hát của Sơn Tùng").image("/data/img/son-tung-mmw-2824-1683249980.jpg")
+//		Playlist playlist1 = Playlist.builder().name("50 bài hát Việt Nam").image("/data/img/432994336_4401343820091471_2698424304376113830_n.jpg")
 //				.build();
 //		playlist1.setUser(sonic);
-//		playlist1.setSongs(Lists.newArrayList(songHTCA, songMNMBA, songNNCA));
+//		playlist1.setSongs(Lists.newArrayList(songHTCA, songCCBQ, songNNCA));
 //		playlistR.saveAndFlush(playlist1);
 //
 //		
-//		Playlist playlist2 = Playlist.builder().name("Tập các bài hát của Bích Phương").image("/data/img/bich_phuong.7ab4f334-5994-461d-9e58-4dbfb763c619.png")
+//		Playlist playlist2 = Playlist.builder().name("Đề xuất cho bạn").image("/data/img/432994336_4401343820091471_2698424304376113830_n.jpg")
 //				.build();
 //		playlist2.setUser(sonic);
-//		playlist2.setSongs(Lists.newArrayList(songBGLC, songCCBQ));
+//		playlist2.setSongs(Lists.newArrayList(songHTCA,songBGLC, songCCBQ));
 //		playlistR.saveAndFlush(playlist2);
+//		
+//		Playlist playlist3 = Playlist.builder().name("Tập tất cả các bài hát").image("/data/img/432994336_4401343820091471_2698424304376113830_n.jpg")
+//				.build();
+//		playlist3.setUser(sonic);
+//		playlist3.setSongs(Lists.newArrayList(songBGLC, songHTCA, songMTCE, songMNMBA, songNNCA, songCCBQ, songTCNNT, songTD));
+//		playlistR.saveAndFlush(playlist3);
+//		
+//		Playlist playlist4 = Playlist.builder().name("Chủ đề mùa xuân").image("/data/img/432994336_4401343820091471_2698424304376113830_n.jpg")
+//				.build();
+//		playlist4.setUser(sonic);
+//		playlist4.setSongs(Lists.newArrayList(songBGLC, songMNMBA, songCCBQ));
+//		playlistR.saveAndFlush(playlist4);
+//		
+//		Playlist playlist5 = Playlist.builder().name("Chủ đề suy").image("/data/img/432994336_4401343820091471_2698424304376113830_n.jpg")
+//				.build();
+//		playlist5.setUser(sonic);
+//		playlist5.setSongs(Lists.newArrayList( 
+//				songTCNNT,songADSVAT,songYNKTY,
+//				songTYCV,songCE));
+//		playlistR.saveAndFlush(playlist5);
 ////
 //		
 ////Thêm trong thư viện
 //		sonic.setLibraryArtist(Lists.newArrayList(artistSonTung, artistPhuongLy));
-//		sonic.setLibraryPlaylist(Lists.newArrayList(playlist1));
+//		sonic.setLibraryPlaylist(Lists.newArrayList(playlist1,playlist3));
 //		userR.save(sonic);
-////
+		
+
 
 		
 	}

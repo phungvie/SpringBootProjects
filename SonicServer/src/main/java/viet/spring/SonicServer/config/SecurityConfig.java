@@ -108,7 +108,13 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter)
 			throws Exception {
 		http.csrf(t -> t.disable()).authorizeHttpRequests(authorize -> authorize
-				.requestMatchers("/sonic/lib/**","/security/getUser").hasAnyRole("USER","ADMIN")
+				.requestMatchers(
+						"/sonic/lib/**",
+						"/security/getUser",
+						"/sonic/user/**").hasAnyRole("USER","ADMIN")//có một trong số các quyền
+				.requestMatchers(
+						"/sonic/amdin/**").hasRole("ADMIN")//chỉ có quyền admin mơi được thực hiện
+
 				.anyRequest().permitAll())
 		// Khi người dùng đã login, với vai trò XX.
 		// Nhưng truy cập vào trang yêu cầu vai trò YY,
