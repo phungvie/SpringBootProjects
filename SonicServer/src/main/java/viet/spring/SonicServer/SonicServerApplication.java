@@ -14,6 +14,7 @@ import com.google.common.collect.Lists;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import viet.spring.SonicServer.config.Config;
 import viet.spring.SonicServer.entity.Artist;
 import viet.spring.SonicServer.entity.Playlist;
 import viet.spring.SonicServer.entity.Role;
@@ -37,6 +38,7 @@ public class SonicServerApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SonicServerApplication.class, args);
+//		System.out.println(Config.getRandomNumber(8));
 
 	}
 
