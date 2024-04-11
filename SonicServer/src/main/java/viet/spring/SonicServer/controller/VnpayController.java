@@ -5,10 +5,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
 import viet.spring.SonicServer.config.Config;
+import viet.spring.SonicServer.payload.VietMessage;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,10 +36,9 @@ public class VnpayController {
 		String vnp_Command = "pay";
 		//
 		String orderType = "other";
-		String amount = req.getParameter("amount")+"00";
+		String amount = req.getParameter("amount") + "00";
 
 		String bankCode = req.getParameter("bankCode");
-//        String bankCode="NCB";
 
 		String vnp_TxnRef = Config.getRandomNumber(8);
 		String vnp_IpAddr = Config.getIpAddress(req);
@@ -48,8 +49,10 @@ public class VnpayController {
 		vnp_Params.put("vnp_Version", vnp_Version);
 		vnp_Params.put("vnp_Command", vnp_Command);
 		vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
+
 //		vnp_Params.put("vnp_Amount", String.valueOf(amount));
 		vnp_Params.put("vnp_Amount", amount);
+
 		vnp_Params.put("vnp_CurrCode", "VND");
 
 		if (bankCode != null && !bankCode.isEmpty()) {
@@ -117,9 +120,60 @@ public class VnpayController {
 
 	}
 
+//http://localhost:8080/vnpay/return?
+//vnp_Amount=10000000000&
+//vnp_BankCode=NCB&
+//vnp_BankTranNo=VNP14373910&
+//vnp_CardType=ATM&
+//vnp_OrderInfo=Thanh+toan+don+hang%3A20622293&
+//vnp_PayDate=20240411085935&
+//vnp_ResponseCode=00&
+//vnp_TmnCode=EYY1S4IO&vnp_TransactionNo=14373910&vnp_TransactionStatus=00&vnp_TxnRef=20622293&vnp_SecureHash=3ab9e87ec019f3f42695dbdcf2a2b0121c280ee35eaf65881bd029deaf3bb6e9b69ae63855cd5c08efc2ef82bbcc80ec38e529fada5bd7b437da6cdbdc1ad6e0
 	@GetMapping("/return")
-	public ResponseEntity<?> getMethodName() {
-		return ResponseEntity.ok().body("trang trả về");
+	public ResponseEntity<VietMessage> getMethodName(@RequestParam String vnp_Amount, @RequestParam String vnp_BankCode,
+			@RequestParam String vnp_BankTranNo, @RequestParam String vnp_CardType, @RequestParam String vnp_OrderInfo,
+			@RequestParam String vnp_PayDate, @RequestParam String vnp_ResponseCode) {
+
+		switch (vnp_ResponseCode) {
+		case "00":
+			return ResponseEntity
+					.ok()
+					.body(new VietMessage(0,"Giao dịch thành công"));
+		case "01":
+			return ResponseEntity
+					.ok()
+					.body(new VietMessage(1,"Giao dịch chưa hoàn tất"));
+		case "02":
+			return ResponseEntity
+					.ok()
+					.body(new VietMessage(2,"Giao dịch bị lỗi"));
+		case "04":
+			return ResponseEntity
+					.ok()
+					.body(new VietMessage(4,"Giao dịch đảo (Khách hàng đã bị trừ tiền tại Ngân hàng nhưng GD chưa thành công ở VNPAY)"));
+		case "05":
+			return ResponseEntity
+					.ok()
+					.body(new VietMessage(5,"VNPAY đang xử lý giao dịch này (GD hoàn tiền)"));
+		case "06":
+			return ResponseEntity
+					.ok()
+					.body(new VietMessage(6,"VNPAY đã gửi yêu cầu hoàn tiền sang Ngân hàng (GD hoàn tiền)"));
+		case "07":
+			return ResponseEntity
+					.ok()
+					.body(new VietMessage(7,"Giao dịch bị nghi ngờ gian lận"));
+		case "09":
+			return ResponseEntity
+					.ok()
+					.body(new VietMessage(9,"GD Hoàn trả bị từ chối"));
+		
+		default:
+			return ResponseEntity.badRequest().build();
+		}
+		
+
+
 	}
 
 }

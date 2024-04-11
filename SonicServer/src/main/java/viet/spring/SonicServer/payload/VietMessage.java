@@ -10,4 +10,5 @@ import lombok.ToString;
 public class VietMessage {
     private int statusCode;
     private String message;
+    private String data;
 }
