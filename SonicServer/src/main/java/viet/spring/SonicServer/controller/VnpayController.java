@@ -4,12 +4,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
 import viet.spring.SonicServer.config.Config;
+import viet.spring.SonicServer.entity.Role;
+import viet.spring.SonicServer.entity.User;
 import viet.spring.SonicServer.payload.VietMessage;
+import viet.spring.SonicServer.repository.ArtistRepository;
+import viet.spring.SonicServer.repository.PlaylistRepository;
+import viet.spring.SonicServer.repository.RoleRepository;
+import viet.spring.SonicServer.repository.SongRepository;
+import viet.spring.SonicServer.repository.UserRepository;
+import viet.spring.SonicServer.service.UserService;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.security.Principal;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,11 +37,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/vnpay")
+@AllArgsConstructor
 public class VnpayController {
+	UserService userService;
+	UserRepository userR;
+//	PlaylistRepository playlistR;
+//	ArtistRepository artistR;
+//	SongRepository songR;
+	RoleRepository roleRepository;
 
 	@GetMapping("/create_payment")
-	public ResponseEntity<?> createPayment(HttpServletRequest req) throws UnsupportedEncodingException {
-
+	public ResponseEntity<?> createPayment(HttpServletRequest req, Principal vietdz) throws UnsupportedEncodingException {
+		User viet= userService.findByUsername(vietdz.getName()).orElse(null);
 		String vnp_Version = "2.1.0";
 		String vnp_Command = "pay";
 		//
@@ -59,7 +76,7 @@ public class VnpayController {
 			vnp_Params.put("vnp_BankCode", bankCode);
 		}
 		vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
-		vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
+		vnp_Params.put("vnp_OrderInfo",viet.getUserID()+"-"+ vnp_TxnRef);
 		vnp_Params.put("vnp_OrderType", orderType);
 
 		String locate = req.getParameter("language");
@@ -108,7 +125,7 @@ public class VnpayController {
 		queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
 		String paymentUrl = Config.vnp_PayUrl + "?" + queryUrl;
 
-		return ResponseEntity.ok().body(paymentUrl);
+		return ResponseEntity.ok().body(new VietMessage(00,null,paymentUrl));
 //        com.google.gson.JsonObject job = new JsonObject();
 //        job.addProperty("code", "00");
 //        job.addProperty("message", "success");
@@ -134,8 +151,17 @@ public class VnpayController {
 			@RequestParam String vnp_BankTranNo, @RequestParam String vnp_CardType, @RequestParam String vnp_OrderInfo,
 			@RequestParam String vnp_PayDate, @RequestParam String vnp_ResponseCode) {
 
+
 		switch (vnp_ResponseCode) {
+		
 		case "00":
+			Integer id=Integer.parseInt(vnp_OrderInfo.split("-")[0]);
+			User viet= userR.findById(id).orElse(null);
+			Role role=roleRepository.findById(4).orElse(null);
+			if(viet!=null&&role!=null) {
+				viet.getRoles().add(role);
+				userR.save(viet);
+			}
 			return ResponseEntity
 					.ok()
 					.body(new VietMessage(0,"Giao dịch thành công"));
@@ -172,8 +198,11 @@ public class VnpayController {
 			return ResponseEntity.badRequest().build();
 		}
 		
+		
 
 
 	}
+
+	
 
 }

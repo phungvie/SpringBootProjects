@@ -1,8 +1,11 @@
 package viet.spring.SonicServer.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,17 +13,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.lettuce.core.dynamic.annotation.Param;
 import lombok.AllArgsConstructor;
 import viet.spring.SonicServer.DTO.ArtistDTO;
 import viet.spring.SonicServer.DTO.PlaylistDTO;
 import viet.spring.SonicServer.DTO.SongDTO;
 import viet.spring.SonicServer.entity.Artist;
 import viet.spring.SonicServer.entity.Playlist;
+import viet.spring.SonicServer.entity.Role;
 import viet.spring.SonicServer.entity.Song;
 import viet.spring.SonicServer.entity.User;
+import viet.spring.SonicServer.payload.Find;
 import viet.spring.SonicServer.payload.VietMessage;
 import viet.spring.SonicServer.repository.ArtistRepository;
 import viet.spring.SonicServer.repository.PlaylistRepository;
+import viet.spring.SonicServer.repository.RoleRepository;
 import viet.spring.SonicServer.repository.SongRepository;
 import viet.spring.SonicServer.repository.UserRepository;
 import viet.spring.SonicServer.service.UserService;
@@ -37,6 +44,7 @@ public class sonicController {
 	PlaylistRepository playlistR;
 	ArtistRepository artistR;
 	SongRepository songR;
+	RoleRepository roleRepository;
 
 	// lấy các nghệ sĩ từ thư viện của người dùng
 	@GetMapping("/lib/artists")
@@ -122,7 +130,6 @@ public class sonicController {
 			return ResponseEntity.notFound().build();
 		}
 	}
-
 	// xóa danh sách phát từ thư viện người dùng
 	@DeleteMapping("/lib/deletePlaylist/{id}")
 	public ResponseEntity<VietMessage> deletePlaylistLib(@PathVariable(name = "id") Integer id, Principal vietdz) {
@@ -235,6 +242,21 @@ public class sonicController {
 		}
 	}
 	
+	@GetMapping("/checkPremium")
+	public ResponseEntity<Boolean> checkPremium(Principal vietdz) {
+		Role role= roleRepository.findById(4).orElse(null);
+		User viet=userService.findByUsername(vietdz.getName()).orElse(null);
+		if(role!=null&&viet!=null) {
+			if(viet.getRoles().contains(role)) {
+				return ResponseEntity.ok().body(true);
+			}else {
+				return ResponseEntity.ok().body(false);
+			}
+		}
+		return ResponseEntity.ok().body(false);
+	}
+	
+	
 	//lấy tất cả danh sách các danh sách phát
 	@GetMapping("/user/playlists")
 	public ResponseEntity<List<PlaylistDTO>> getAllPlaylists() {
@@ -284,6 +306,23 @@ public class sonicController {
 		}
 
 	}
+
+@GetMapping("/findByKeyword")
+public ResponseEntity<List<Find>> findByKeyword(@RequestParam String keyword) {
+//	List<Find>findList1= artistR.findByKeyword(keyword).stream().limit(2).map(t -> new ArtistDTO(t)).map(t->new Find(t)).toList();
+//	List<Find>findList2=songR.findByKeyword(keyword).stream().limit(2).map(t -> new SongDTO(t)).map(t -> new Find(t)).toList();
+//	List<Find>findList3=playlistR.findByKeyword(keyword).stream().limit(2).map(t -> new PlaylistDTO(t)).map(t -> new Find(t)).toList();
+	List<Find>findList1= artistR.findByKeyword(keyword).stream().map(t -> new ArtistDTO(t)).map(t->new Find(t)).toList();
+	List<Find>findList2=songR.findByKeyword(keyword).stream().map(t -> new SongDTO(t)).map(t -> new Find(t)).toList();
+	List<Find>findList3=playlistR.findByKeyword(keyword).stream().map(t -> new PlaylistDTO(t)).map(t -> new Find(t)).toList();
+	
+	List<Find>vietdz=new ArrayList<>();
+	vietdz.addAll(findList1);
+	vietdz.addAll(findList2);
+	vietdz.addAll(findList3);
+	
+    return ResponseEntity.ok().body(vietdz);
+}
 
 
 }
