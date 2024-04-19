@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.lettuce.core.dynamic.annotation.Param;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import viet.spring.SonicServer.DTO.ArtistDTO;
 import viet.spring.SonicServer.DTO.PlaylistDTO;
