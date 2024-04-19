@@ -191,7 +191,7 @@ public class SonicServerApplication implements CommandLineRunner {
 //		sonic.setLibraryPlaylist(Lists.newArrayList(playlist1,playlist3));
 //		userR.save(sonic);
 		
-
+		
 
 		
 	}
